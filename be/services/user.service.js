@@ -19,3 +19,13 @@ export const checkEmail = async (email) => {
         return false;
     }
 };
+
+export const findUser = async (email) => {
+    try {
+        const user = await User.findOne({ email: email });
+        return user;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+};

@@ -1,6 +1,6 @@
 import * as nodemailer from 'nodemailer';
-import { generateOTP } from '../untils/otp.js';
-import { hash } from '../untils/hash.js';
+import { generateOTP } from '../utils/otp.js';
+import { hash } from '../utils/hash.js';
 
 import { createOTP } from '../services/otp.service.js';
 
@@ -16,9 +16,8 @@ let transporter = nodemailer.createTransport({
 });
 
 export const CreateOTPController = async (req, res) => {
-    const { email } = req.query;
+    const { email } = req.body;
     const otp = generateOTP();
-
     const hOTP = await hash(otp);
 
     const mailOptions = {
@@ -30,17 +29,17 @@ export const CreateOTPController = async (req, res) => {
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
-            return res.status(200).json({ code: 404, message: 'OTP not created' });
+            return res.status(404).json({ code: 404, message: 'OTP not created' });
         } else {
             console.log('Email sent: ' + JSON.stringify(info));
         }
     });
-
+    console.log('SENT');
     let result = await createOTP(email, hOTP);
 
     if (result) {
         return res.status(200).json({ code: 200, message: 'OTP created successfully' });
     } else {
-        return res.status(200).json({ code: 404, message: 'OTP not created' });
+        return res.status(404).json({ code: 404, message: 'OTP not created' });
     }
 };

@@ -1,21 +1,39 @@
-import { useState } from 'react';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-function App() {
-    const [data, setData] = useState([]);
-    const handleData = () => {
-        setData(['Banana', 'Orange', 'Apple', 'Mango']);
-        console.log(data);
-    };
-    const deleteData = (i) => {
-        data.splice(i, 1);
-        console.log(data);
-    };
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import userRoutes from './router';
+import DefaultLayout from './components/Layout/DefaultLayout';
+import BGLayout from './components/Layout/BGLayout';
+
+const App = () => {
     return (
         <div className="App">
-            <button onClick={() => handleData()}>add data</button>
-            <button onClick={() => deleteData(1)}>delete data</button>
+            <Routes>
+                {userRoutes.map((route, index) => {
+                    const Page = route.component;
+                    return (
+                        <Route
+                            key={index}
+                            path={route.path}
+                            element={
+                                route.defaultLayout ? (
+                                    <DefaultLayout>
+                                        <Page />
+                                    </DefaultLayout>
+                                ) : (
+                                    <BGLayout isPreLogin>
+                                        <Page />
+                                    </BGLayout>
+                                )
+                            }
+                        />
+                    );
+                })}
+            </Routes>
         </div>
     );
-}
+};
 
 export default App;

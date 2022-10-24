@@ -14,8 +14,8 @@ import Spiner from '../../components/Spinner';
 
 import { BASE_URL } from '../../constant';
 
-const Login = () => {
-    // const navigate = useNavigate();
+const Login = ({ socket }) => {
+    const navigate = useNavigate();
 
     const [qrCodeBase64, setQrCodeBase64] = useState('');
 
@@ -29,43 +29,69 @@ const Login = () => {
 
     const [error, setError] = useState({
         error: false,
-        message: 'Email or password is incorrect',
+        message: '',
+        type: 0,
     });
 
-    useEffect(() => {
+    const getQR = () => {
         axios.get(`${BASE_URL}/api/generate/qrcode`).then((res) => {
             setQrCodeBase64(res.data.qrcode);
         });
-    }, []);
-    setTimeout(() => {
+    };
+    useEffect(getQR, []);
+
+    socket.on('expired', () => {
         setIsExpired(true);
-    }, 4000);
+    });
+
     const handleGetNewQRCode = () => {
         setIsLoading(true);
-
-        //get new QR code from api
-        console.log('get new qr');
-
-        setTimeout(() => {
-            console.log('time out');
-            setIsLoading(false);
-            setIsExpired(false);
-        }, 3000);
+        getQR();
+        setIsLoading(false);
+        setIsExpired(false);
     };
 
     const handleLoginWithPassword = () => {
         setIsLoading(true);
         const data = { email, password };
-        setTimeout(() => {
-            console.log(data);
-            setIsLoading(false);
-        }, 3000);
-        console.log(data);
+        axios
+            .post(`${BASE_URL}/api/login/password`, data)
+            .then((res) => {
+                if (res.status === 200) {
+                    setIsLoading(false);
+                    //save data to local storage
+                    localStorage.setItem('token', res.data.user.token);
+                    localStorage.setItem('user', JSON.stringify(res.data.user));
+                    //navigate to chat page
+                    navigate(`/chat/${res.data.user._id}`);
+                }
+            })
+            .catch((err) => {
+                if (err.response) {
+                    setIsLoading(false);
+                    setError({
+                        error: true,
+                        message: err.response.data.message,
+                        type: 1,
+                    });
+                }
+            });
     };
 
     const handleGetEmailWithOtp = (email) => {
-        console.log('email', email);
-        setEmail(email);
+        setIsLoading(true);
+        axios
+            .post(`${BASE_URL}/api/check/mail`, { email })
+            .then((res) => {
+                setIsLoading(false);
+                if (res.status === 200) return false;
+            })
+            .catch((err) => {
+                if (err.response) {
+                    setIsLoading(false);
+                    return true;
+                }
+            });
         return true;
     };
 
@@ -77,7 +103,13 @@ const Login = () => {
         return true;
     };
     const steps = [
-        <EmailStep page={page} setPage={setPage} isLast={false} onNext={(email) => handleGetEmailWithOtp(email)} />,
+        <EmailStep
+            page={page}
+            setPage={setPage}
+            isLoading={isLoading}
+            isLast={false}
+            onNext={(email) => handleGetEmailWithOtp(email)}
+        />,
         <OtpStep
             page={page}
             setPage={setPage}
@@ -130,6 +162,7 @@ const Login = () => {
                         />
                     </div>
                     <div className="mx-auto">{error.error && <p className="text-danger">{error.message}</p>}</div>
+                    {error.error && error.type === 1 && <div className="text-danger">{error.message}</div>}
                     <Button className="m-3 mb-5" onClick={handleLoginWithPassword}>
                         {isLoading ? <Spiner /> : 'Đăng nhập với mật khẩu'}
                     </Button>

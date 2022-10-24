@@ -33,36 +33,38 @@ export const RegisterController = async (req, res) => {
 export const LoginWithPasswordController = async (req, res) => {
     const { email, password } = req.body;
     const user = await findUser(email);
-    if (!user) {
-        return res.status(200).json({
+
+    if (user) {
+        let validPassword = await compare(password, user.password);
+        if (validPassword) {
+            const { password, ...other } = user._doc;
+
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
+
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'strict',
+            });
+            return res.status(200).json({
+                code: 200,
+                message: 'Login success',
+                user: {
+                    ...other,
+                },
+                accessToken,
+            });
+        } else {
+            return res.status(404).json({
+                code: 404,
+                message: 'Password is incorrect',
+            });
+        }
+    } else {
+        return res.status(400).json({
             code: 400,
             message: 'User not found',
-        });
-    }
-    if (user && !compare(password, user.password)) {
-        return res.status(200).json({
-            code: 404,
-            message: 'Password is incorrect',
-        });
-    }
-    if (user && compare(password, user.password)) {
-        const { password, ...other } = user._doc;
-
-        const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
-        });
-        return res.status(200).json({
-            code: 200,
-            message: 'Login success',
-            user: {
-                ...other,
-                accessToken,
-            },
         });
     }
 };

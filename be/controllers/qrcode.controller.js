@@ -36,6 +36,9 @@ export const GenerateQRCodeController = async (req, res) => {
 
     const url = `${preURL}?tk=${c}`;
     const qrcode = await generateQRCode(url);
-
+    let timeout = setTimeout(() => {
+        io.to(sID).emit('expired');
+        clearTimeout(timeout);
+    }, 30000);
     if (qrcodeS) return res.status(200).json({ code: 200, qrcode: qrcode });
 };

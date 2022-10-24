@@ -22,11 +22,11 @@ const App = () => {
                             element={
                                 route.defaultLayout ? (
                                     <DefaultLayout>
-                                        <Page io={socket} />
+                                        <Page />
                                     </DefaultLayout>
                                 ) : (
                                     <BGLayout isPreLogin>
-                                        <Page />
+                                        <Page socket={socket} />
                                     </BGLayout>
                                 )
                             }

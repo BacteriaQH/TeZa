@@ -1,0 +1,47 @@
+ul li .nav-link {
+    color: #464646;
+}
+ul li .nav-link:hover {
+    color: #000;
+}
+
+ul li .active {
+    color: #333;
+    font-weight: bold;
+}
+
+.qrcode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1.5;
+}
+
+.qrcode_expired {
+    position: absolute;
+    top: 35%;
+    left: 44%;
+    color: #0490f3;
+    font-weight: bold;
+    background: #fff;
+}
+.line {
+    height: 1px;
+    width: 100%;
+    background: #464646;
+}
+.action-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    color: #000;
+}
+
+.f-left {
+    float: left;
+}
+
+.f-right {
+    float: right;
+}

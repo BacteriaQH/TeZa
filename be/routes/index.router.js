@@ -9,6 +9,7 @@ import {
 } from '../controllers/user.controller.js';
 import { CreateOTPController, LoginWithOTPController } from '../controllers/otp.controller.js';
 import { verifyOTPMiddleware } from '../middlewares/verifyOTP.middleware.js';
+import { GenerateQRCodeController } from '../controllers/qrcode.controller.js';
 
 const initWebRoutes = (app) => {
     router.get('/hello', Greeting);
@@ -17,6 +18,7 @@ const initWebRoutes = (app) => {
     router.post('/login/password', LoginWithPasswordController);
 
     router.post('/generate/otp', CreateOTPController);
+    router.get('/generate/qrcode', GenerateQRCodeController);
     router.post('/login/otp', verifyOTPMiddleware, LoginWithOTPController);
 
     return app.use('/api', router);

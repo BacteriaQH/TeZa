@@ -43,3 +43,33 @@ export const CreateOTPController = async (req, res) => {
         return res.status(404).json({ code: 404, message: 'OTP not created' });
     }
 };
+
+export const LoginWithOTPController = async (req, res) => {
+    const { email } = req.body;
+    const user = await findUser(email);
+    if (!user) {
+        return res.status(200).json({
+            code: 404,
+            message: 'User not found',
+        });
+    }
+    if (user) {
+        const { password, ...other } = user._doc;
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+        });
+        return res.status(200).json({
+            code: 200,
+            message: 'Login success',
+            user: {
+                ...other,
+                accessToken,
+            },
+        });
+    }
+};

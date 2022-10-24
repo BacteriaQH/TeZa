@@ -9,3 +9,23 @@ export const createOTP = async (email, otp) => {
         return false;
     }
 };
+
+export const findOTPWithEmail = async (email) => {
+    try {
+        const otpR = await OTP.find({ email });
+        return otpR;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
+
+export const deleteOTP = async (email) => {
+    try {
+        await OTP.deleteMany({ email });
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};

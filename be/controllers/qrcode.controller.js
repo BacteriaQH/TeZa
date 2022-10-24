@@ -1,22 +1,24 @@
-import CrytoJS from 'crypto-js';
+import CryptoJS from 'crypto-js';
 
 import { getIO } from '../index.js';
+import { createQRCode } from '../services/qrcode.service.js';
+
 import { generateRandomString, obfuscate } from '../utils/random.js';
 import { generateQRCode } from '../utils/qrcode.js';
+import { getAgent } from '../utils/getAgent.js';
+import { getSocketID } from '../utils/getSocketID.js';
 
 const preURL = `${process.env.SERVER_URL}/api/verify/qr`;
 
 const secretKey = process.env.SECRET_KEY;
 
 export const GenerateQRCodeController = async (req, res) => {
+    //get socket id
     let io = getIO();
-    const socket = io.sockets.adapter.rooms;
-    //console.log('socket', socket);
-    let socketId;
-    for (let id of socket) {
-        socketId = id;
-    }
-    let sID = socketId.toString().split(',')[0];
+    let sID = getSocketID(io);
+    let agent = getAgent(req);
+    // console.log('agentObject', agent);
+
     const timestamp = Date.now().toString();
     const randomStr = generateRandomString(timestamp.length);
     /**
@@ -26,9 +28,14 @@ export const GenerateQRCodeController = async (req, res) => {
 
     const m = `${preM}.${sID}`;
 
-    const c = CrytoJS.AES.encrypt(m, secretKey).toString();
+    const c = CryptoJS.AES.encrypt(m, secretKey).toString();
+    const qrcodeS = await createQRCode(c, sID, {
+        browser: { name: agent.browser.name, version: agent.browser.version },
+        os: { name: agent.os.name, version: agent.os.version },
+    });
+
     const url = `${preURL}?tk=${c}`;
     const qrcode = await generateQRCode(url);
 
-    return res.status(200).json({ code: 200, qrcode: qrcode });
+    if (qrcodeS) return res.status(200).json({ code: 200, qrcode: qrcode });
 };

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-
-const userSchema = mongoose.Schema(
+import { Schema, model } from 'mongoose';
+import { agentSchema } from './qrcode.model.js';
+const userSchema = new Schema(
     {
         name: {
             type: String,
@@ -21,10 +21,11 @@ const userSchema = mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        agent: [agentSchema],
     },
     { timestamps: true },
 );
 
-const User = mongoose.model('User', userSchema);
+const User = model('User', userSchema);
 
 export default User;

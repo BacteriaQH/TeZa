@@ -13,6 +13,7 @@ import connetDB from './config/db.js';
 
 connetDB();
 const app = express();
+app.set('trust proxy', true);
 // app.use(cors(corsOptions));
 let httpServer = createServer(app);
 let io = new Server(httpServer, {

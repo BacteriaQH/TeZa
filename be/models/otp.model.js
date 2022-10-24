@@ -1,17 +1,11 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-const otpSchema = mongoose.Schema({
+const otpSchema = new Schema({
     email: String,
     otp: String,
-    time: {
-        type: Date,
-        default: Date.now(),
-        index: {
-            expires: '3m',
-        },
-    },
+    createdAt: { type: Date, expires: 150, default: Date.now },
 });
-
-const OTP = mongoose.model('OTP', otpSchema);
+otpSchema.index({ lastModifiedDate: 1 }, { expireAfterSeconds: 150 });
+const OTP = model('OTP', otpSchema);
 
 export default OTP;

@@ -34,7 +34,6 @@ export const CreateOTPController = async (req, res) => {
             console.log('Email sent: ' + JSON.stringify(info));
         }
     });
-    console.log('SENT');
     let result = await createOTP(email, hOTP);
 
     if (result) {

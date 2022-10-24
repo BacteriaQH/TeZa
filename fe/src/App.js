@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -8,6 +9,7 @@ import DefaultLayout from './components/Layout/DefaultLayout';
 import BGLayout from './components/Layout/BGLayout';
 
 const App = () => {
+    const socket = io('http://localhost:3000');
     return (
         <div className="App">
             <Routes>
@@ -20,7 +22,7 @@ const App = () => {
                             element={
                                 route.defaultLayout ? (
                                     <DefaultLayout>
-                                        <Page />
+                                        <Page io={socket} />
                                     </DefaultLayout>
                                 ) : (
                                     <BGLayout isPreLogin>

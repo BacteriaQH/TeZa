@@ -1,0 +1,15 @@
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    font-size: 1.25rem;
+    color: #0d6efd;
+}
+
+.countdown-expired {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

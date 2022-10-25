@@ -1,11 +1,3 @@
-import * as OTPGenerator from 'otp-generator';
-
 export const generateOTP = () => {
-    const otp = OTPGenerator.generate(6, {
-        lowerCaseAlphabets: false,
-        upperCaseAlphabets: false,
-        specialChars: false,
-        digits: true,
-    });
-    return otp;
+    return Math.floor(Math.random() * (999999 - 100000) + 100000);
 };

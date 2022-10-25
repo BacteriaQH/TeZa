@@ -3,6 +3,8 @@ import { generateOTP } from '../utils/otp.js';
 import { hash } from '../utils/hash.js';
 
 import { createOTP } from '../services/otp.service.js';
+import { findUser } from '../services/user.service.js';
+import { generateAccessToken, generateRefreshToken } from '../utils/token.js';
 
 const user = process.env.MAIL_USER;
 const pass = process.env.MAIL_PASS;
@@ -67,8 +69,8 @@ export const LoginWithOTPController = async (req, res) => {
             message: 'Login success',
             user: {
                 ...other,
-                accessToken,
             },
+            accessToken,
         });
     }
 };

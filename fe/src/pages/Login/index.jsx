@@ -77,28 +77,54 @@ const Login = ({ socket }) => {
                 }
             });
     };
-
-    const handleGetEmailWithOtp = (email) => {
+    const handleSendOtp = async (email) => {
+        axios.post(`${BASE_URL}/api/generate/otp`, { email });
+    };
+    const handleGetEmailWithOtp = async (email) => {
         setIsLoading(true);
-        axios
-            .post(`${BASE_URL}/api/check/mail`, { email })
-            .then((res) => {
+        const res = await axios.post(`${BASE_URL}/api/check/mail`, { email }).catch((err) => {
+            if (err.response) {
+                handleSendOtp(email);
                 setIsLoading(false);
-                if (res.status === 200) return false;
-            })
-            .catch((err) => {
-                if (err.response) {
-                    setIsLoading(false);
-                    return true;
-                }
+                return true;
+            }
+        });
+        if (res.data) {
+            setIsLoading(false);
+            setError({
+                error: true,
+                message: res.data.message,
+                type: 2,
             });
+            return false;
+        }
         return true;
     };
 
     const handleLoginWithOtp = (email, otp) => {
-        console.log('email', email);
-        console.log('otp', otp);
-        setOtp(otp);
+        setIsLoading(true);
+        axios
+            .post(`${BASE_URL}/api/login/otp`, { email, otp })
+            .then((res) => {
+                if (res.status === 200) {
+                    setIsLoading(false);
+                    //save data to local storage
+                    localStorage.setItem('token', res.data.user.token);
+                    localStorage.setItem('user', JSON.stringify(res.data.user));
+                    //navigate to chat page
+                    navigate(`/chat/${res.data.user._id}`);
+                }
+            })
+            .catch((err) => {
+                if (err.response) {
+                    setIsLoading(false);
+                    setError({
+                        error: true,
+                        message: err.response.data.message,
+                        type: 3,
+                    });
+                }
+            });
 
         return true;
     };
@@ -109,12 +135,15 @@ const Login = ({ socket }) => {
             isLoading={isLoading}
             isLast={false}
             onNext={(email) => handleGetEmailWithOtp(email)}
+            error={error}
         />,
         <OtpStep
             page={page}
             setPage={setPage}
             isLast={true}
             email={email}
+            error={error}
+            sendOtp={(email) => handleSendOtp(email)}
             onSubmit={(email, otp) => handleLoginWithOtp(email, otp)}
         />,
     ];

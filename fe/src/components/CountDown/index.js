@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 
 import './index.css';
 
-const CountdownTimer = ({ minutes, seconds }) => {
+const CountdownTimer = ({ minutes, seconds, email, sendOtp }) => {
     const [remainingTime, setRemainingTime] = useState({
         minutes: minutes,
         seconds: seconds,
@@ -37,7 +37,9 @@ const CountdownTimer = ({ minutes, seconds }) => {
     }, [remainingTime]);
 
     const handleGetNewOtp = () => {
-        console.log('get new otp');
+        console.log('get new otp', email);
+        console.log('send otp', sendOtp);
+        sendOtp(email);
         setRemainingTime({
             minutes: '2',
             seconds: '30',

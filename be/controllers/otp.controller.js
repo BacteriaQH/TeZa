@@ -19,7 +19,7 @@ let transporter = nodemailer.createTransport({
 
 export const CreateOTPController = async (req, res) => {
     const { email } = req.body;
-    const otp = generateOTP();
+    const otp = generateOTP().toString();
     const hOTP = await hash(otp);
 
     const mailOptions = {
@@ -73,4 +73,8 @@ export const LoginWithOTPController = async (req, res) => {
             accessToken,
         });
     }
+};
+
+export const VerifyWithOTPController = async (req, res) => {
+    return res.status(200).json({ code: 200, message: 'Verify OTP success' });
 };

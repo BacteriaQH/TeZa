@@ -2,8 +2,8 @@ import { faCalendar, faLocationDot, faLock } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-
-const InforStep = ({ page, setPage, isLast, name, email, onNext, onSubmit }) => {
+const defaultFn = () => {};
+const InforStep = ({ page, setPage, isLast, name, email, onNext, onSubmit = defaultFn }) => {
     const [password, setPassword] = useState('');
     const [passwordRetype, setPasswordRetype] = useState('');
 

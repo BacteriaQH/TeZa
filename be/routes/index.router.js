@@ -7,7 +7,7 @@ import {
     LoginWithPasswordController,
     RegisterController,
 } from '../controllers/user.controller.js';
-import { CreateOTPController, LoginWithOTPController } from '../controllers/otp.controller.js';
+import { CreateOTPController, LoginWithOTPController, VerifyWithOTPController } from '../controllers/otp.controller.js';
 import { verifyOTPMiddleware } from '../middlewares/verifyOTP.middleware.js';
 import { GenerateQRCodeController } from '../controllers/qrcode.controller.js';
 import { VerifyQRCodeController } from '../middlewares/verifyQRCode.middleware.js';
@@ -23,6 +23,7 @@ const initWebRoutes = (app) => {
 
     router.post('/login/otp', verifyOTPMiddleware, LoginWithOTPController);
     router.post('/login/qrcode', VerifyQRCodeController);
+    router.post('/verify/otp', verifyOTPMiddleware, VerifyWithOTPController);
     return app.use('/api', router);
 };
 

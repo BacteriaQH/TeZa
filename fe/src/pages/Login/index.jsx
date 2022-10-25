@@ -82,6 +82,7 @@ const Login = ({ socket }) => {
     };
     const handleGetEmailWithOtp = async (email) => {
         setIsLoading(true);
+        setEmail(email);
         const res = await axios.post(`${BASE_URL}/api/check/mail`, { email }).catch((err) => {
             if (err.response) {
                 handleSendOtp(email);

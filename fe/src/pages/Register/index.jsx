@@ -79,15 +79,17 @@ const Register = () => {
     };
 
     const handleSubmit = (name, email, password, dob, isMale, address) => {
-        setForm({
-            name: name,
-            email: email,
-            password: password,
-            dob: dob,
-            isMale: isMale,
-            address: address,
-        });
-        axios.post(`${BASE_URL}/api/register`, form).then((res) => {
+        /* Setting the form state. */
+        // setForm({
+        //     name: name,
+        //     email: email,
+        //     password: password,
+        //     dob: dob,
+        //     isMale: isMale,
+        //     address: address,
+        // });
+
+        axios.post(`${BASE_URL}/api/register`, { name, email, password, dob, isMale, address }).then((res) => {
             navigate(`/login`);
         });
     };

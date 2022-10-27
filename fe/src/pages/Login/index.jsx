@@ -43,7 +43,9 @@ const Login = ({ socket }) => {
     socket.on('expired', () => {
         setIsExpired(true);
     });
-
+    socket.on('verified', ({ name, _id }) => {
+        navigate(`/pre/login`, { state: { name, _id } });
+    });
     const handleGetNewQRCode = () => {
         setIsLoading(true);
         getQR();
@@ -60,10 +62,10 @@ const Login = ({ socket }) => {
                 if (res.status === 200) {
                     setIsLoading(false);
                     //save data to local storage
-                    localStorage.setItem('token', res.data.user.token);
+                    localStorage.setItem('token', res.data.user.accessToken);
                     localStorage.setItem('user', JSON.stringify(res.data.user));
                     //navigate to chat page
-                    navigate(`/chat/${res.data.user._id}`);
+                    navigate(`/chat/${res.data.user._id}`, { state: res.data });
                 }
             })
             .catch((err) => {
@@ -110,10 +112,10 @@ const Login = ({ socket }) => {
                 if (res.status === 200) {
                     setIsLoading(false);
                     //save data to local storage
-                    localStorage.setItem('token', res.data.user.token);
+                    localStorage.setItem('token', res.data.user.accessToken);
                     localStorage.setItem('user', JSON.stringify(res.data.user));
                     //navigate to chat page
-                    navigate(`/chat/${res.data.user._id}`);
+                    navigate(`/chat/${res.data.user._id}`, { state: res.data });
                 }
             })
             .catch((err) => {

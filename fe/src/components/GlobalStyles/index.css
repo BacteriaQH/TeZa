@@ -1,15 +1,32 @@
+@import 'normalize.css';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
 body {
-    margin: 0;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizespeed;
+    color: var(--text-color);
+    overflow-y: overlay;
 }
 
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+button,
+input,
+[tabindex] {
+    border: none;
+    outline: none;
 }
 
-/* Firefox */
-input[type='number'] {
-    -moz-appearance: textfield;
+a {
+    color: var(--text-color);
+    text-decoration: none;
 }

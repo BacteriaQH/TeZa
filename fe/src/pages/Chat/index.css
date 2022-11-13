@@ -1,0 +1,11 @@
+.room-list {
+    display: flex;
+    height: 75%;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.chat-list {
+    display: flex;
+    height: 75%;
+}

@@ -9,13 +9,13 @@ import Footer from '../Footer';
 const DefaultLayout = ({ children }) => {
     return (
         <>
-            <Row style={{margin : '0px'}}>
+            <Row style={{ margin: '0px' }}>
                 <Header />
             </Row>
             <Row className="body m-3">{children}</Row>
-            <Row className="m-3">
+            {/* <Row className="m-3">
                 <Footer />
-            </Row>
+            </Row> */}
         </>
     );
 };

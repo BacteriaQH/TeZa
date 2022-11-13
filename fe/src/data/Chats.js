@@ -11,8 +11,8 @@ const Chats = {
     }],
     messages: [{
         id: 'm1',
-        content: 'How are you, Lukas!',
-        createdAt: '2020-10-10T12:48:00.000Z',
+        content: 'How are you hi mn😍, Lukas!',
+        createdAt: '2022-11-03T15:48:00.000Z',
         user: {
             id: 'u1',
             name: 'Vadim',

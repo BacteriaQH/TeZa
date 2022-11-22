@@ -1,0 +1,9 @@
+.last-message {
+    font-size: 14px;
+    color: #9b9b9b;
+    margin-top: 5px;
+    white-space: nowrap;
+    width: 15em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

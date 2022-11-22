@@ -1,0 +1,26 @@
+{
+  "name": "teza",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "app": "cd TeZaApp && npm start",
+    "be": "cd be && npm start",
+    "fe": "cd fe && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BacteriaQH/TeZa.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BacteriaQH/TeZa/issues"
+  },
+  "homepage": "https://github.com/BacteriaQH/TeZa#readme",
+  "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
+    "react-native-input-scroll-view": "^1.11.0"
+  }
+}

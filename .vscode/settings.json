@@ -17,5 +17,8 @@
             "password": ""
         }
     ],
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "[xml]": {
+        "editor.defaultFormatter": "fabianlauer.vs-code-xml-format"
+    }
 }

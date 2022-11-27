@@ -3,7 +3,7 @@ import { Col, Row } from 'react-bootstrap'
 
 import dayjs from 'dayjs'
 import Avatar from '../Avatar'
-import { relativeTime } from 'dayjs/plugin/relativeTime';
+import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime)
 const MessageItem = ({ mess }) => {
     return (

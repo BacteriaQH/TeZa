@@ -1,35 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row, Popover, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faImage,
-    faPaperPlane,
-    faFaceSmile,
-} from '@fortawesome/free-solid-svg-icons';
+import { faImage, faPaperPlane, faFaceSmile } from '@fortawesome/free-solid-svg-icons';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import classNames from 'classnames/bind';
-
+import axios from 'axios';
 import styles from './index.css';
 
 import Avatar from '../../Avatar';
 import MessageItem from '../../Message/MessageItem';
 
 import Chats from '../../../assets/dummy-data/message.json';
-import PreLayout from '../../Layout/BGLayout';
-
+import { BASE_URL } from '../../../constant';
 const cx = classNames.bind(styles);
 
 const ChatWindow = ({ mate, defaultChatmate }) => {
     const [message, setMessage] = useState('');
     const [messageHistory, setMessageHistory] = useState('');
     const [chatmate, setChatmate] = useState({});
-    const handlePickEmoji = (emojiObject, event) => {
-        setMessage(message + emojiObject.emoji);
-    };
-
-    const handleSendMessage = () => {
-        console.log(message);
-    };
+    const [chatImage, setChatImage] = useState('');
 
     useEffect(() => {
         const updatedChatmate = () => {
@@ -38,19 +27,69 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
         return updatedChatmate();
     }, [mate, defaultChatmate]);
 
-    useEffect(() => {
-        console.log('messageHistory', Chats.reverse());
-        // setMessageHistory(Chats.reverse());
-    }, []);
+    const handlePickEmoji = (emojiObject, event) => {
+        setMessage(message + emojiObject.emoji);
+    };
+
+    const handleSendMessage = () => {
+        console.log(message);
+    };
+    const handleImageUpload = async (file) => {
+        const fileU = file.target.files[0];
+        if (fileU) {
+            axios
+                .get(`${BASE_URL}/api/file/upload`, {
+                    params: { fileName: fileU.name, fileType: fileU.type },
+                })
+                .then((res) => {
+                    if (res.data.code === 200) {
+                        const url = res.data.data.url;
+                        axios
+                            .put(res.data.data.signedRequest, fileU, {
+                                headers: {
+                                    'Content-Type': fileU.type,
+                                },
+                                crossdomain: true,
+                            })
+                            .then((res) => {
+                                if (res.status === 200) {
+                                    console.log(url);
+                                    setChatImage(url);
+                                }
+                            });
+                    }
+                });
+        }
+    };
+
+    const handleDeleteImage = () => {
+        const key = chatImage.split('/')[4];
+        if (key) {
+            axios
+                .get(`${BASE_URL}/api/file/delete`, {
+                    params: { key },
+                })
+                .then((res) => {
+                    if (res.data.code === 200) {
+                        console.log('delete success');
+                        setChatImage('');
+                    }
+                });
+        }
+    };
+
+    /**
+     * delete image from selected image but not send before reload
+     */
+
+    window.addEventListener('beforeunload', (event) => {
+        handleDeleteImage();
+    });
 
     const IconPopover = (
         <Popover>
             <Popover.Body>
-                <EmojiPicker
-                    searchDisabled
-                    onEmojiClick={handlePickEmoji}
-                    theme={Theme.AUTO}
-                />
+                <EmojiPicker searchDisabled onEmojiClick={handlePickEmoji} theme={Theme.AUTO} />
             </Popover.Body>
         </Popover>
     );
@@ -69,10 +108,7 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
                 >
                     {chatmate.id && (
                         <>
-                            <Avatar
-                                name={chatmate.user.name}
-                                image={chatmate.user.image}
-                            />
+                            <Avatar name={chatmate.user.name} image={chatmate.user.image} />
                             <div className="mx-3" style={{}}>
                                 {chatmate.user.name}
                             </div>
@@ -81,8 +117,8 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
                 </Col>
             </Row>
             <Row className={['mx-3', 'my-5', cx('chat')]}>
-                {Chats.slice(0)
-                    .reverse()
+                {Chats.reverse()
+                    .slice(0)
                     .map((messages) => (
                         <MessageItem mess={messages} key={messages.id} />
                     ))}
@@ -98,11 +134,7 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
                     }}
                 >
                     <label>
-                        <FontAwesomeIcon
-                            icon={faImage}
-                            className="my-3 mx-2"
-                            style={{ cursor: 'pointer' }}
-                        />
+                        <FontAwesomeIcon icon={faImage} className="my-3 mx-2" style={{ cursor: 'pointer' }} />
                         <input
                             type="file"
                             accept="image/png, image/jpeg"
@@ -111,6 +143,7 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
                                 zIndex: '-1',
                                 position: 'absolute',
                             }}
+                            onChange={handleImageUpload}
                         />
                     </label>
                 </Col>
@@ -123,11 +156,7 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
                             padding: '10px',
                         }}
                     >
-                        <OverlayTrigger
-                            trigger={'click'}
-                            placement={'top'}
-                            overlay={IconPopover}
-                        >
+                        <OverlayTrigger trigger={'click'} placement={'top'} overlay={IconPopover}>
                             <FontAwesomeIcon icon={faFaceSmile} />
                         </OverlayTrigger>
                         <input
@@ -151,11 +180,7 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
                         borderRadius: '80px',
                     }}
                 >
-                    <FontAwesomeIcon
-                        icon={faPaperPlane}
-                        className="my-3 mx-2"
-                        onClick={handleSendMessage}
-                    />
+                    <FontAwesomeIcon icon={faPaperPlane} className="my-3 mx-2" onClick={handleSendMessage} />
                 </Col>
             </Row>
         </div>

@@ -14,11 +14,20 @@ import {
     LoginQRCodeController,
     VerifyQRCodeController,
 } from '../controllers/qrcode.controller.js';
+import { DeleteFileController, UploadFileController } from '../controllers/file.controller.js';
 
 const initWebRoutes = (app) => {
+    /**
+     * pre login
+     */
     router.get('/hello', Greeting);
     router.post('/check/mail', CheckEmailController);
     router.post('/register', RegisterController);
+    router.get('/file/upload', UploadFileController);
+    router.get('/file/delete', DeleteFileController);
+    /**
+     * login
+     */
     router.post('/login/password', LoginWithPasswordController);
 
     router.post('/generate/otp', CreateOTPController);

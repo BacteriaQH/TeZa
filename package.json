@@ -18,9 +18,5 @@
   "bugs": {
     "url": "https://github.com/BacteriaQH/TeZa/issues"
   },
-  "homepage": "https://github.com/BacteriaQH/TeZa#readme",
-  "dependencies": {
-    "@expo/vector-icons": "^13.0.0",
-    "react-native-input-scroll-view": "^1.11.0"
-  }
+  "homepage": "https://github.com/BacteriaQH/TeZa#readme"
 }

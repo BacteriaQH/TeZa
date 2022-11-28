@@ -10,7 +10,7 @@
 .section {
     height: 100vh;
     padding: 0;
-    background-image: url('../../../assets/imgs/background.svg');
+    background-image: url('../../assets/imgs/background.svg');
     transition: tranform 0.25s ease-in-out, filter 0.25s cubic-bezier(1, -0.67, 0.58, 1);
     object-fit: inherit;
 }

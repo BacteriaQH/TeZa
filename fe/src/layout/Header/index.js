@@ -4,9 +4,10 @@ import { Col, Row, Image } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import logo from '../../../assets/imgs/c_logo.png';
-import Input from '../../Input';
-import Avatar from '../../Avatar';
+import Input from '../../components/Input';
+import Avatar from '../../components/Avatar';
+
+import logo from '../../assets/imgs/c_logo.png';
 
 const Header = () => {
     return (

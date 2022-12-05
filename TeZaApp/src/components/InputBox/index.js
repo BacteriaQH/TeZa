@@ -14,23 +14,15 @@ export default function InputBox() {
         setMessage('')
     }
     return (
-        <SafeAreaView
-            edges={['bottom']}
-            style={styles.container}>
-            {/* <View
-            // style={styles.container}
-            > */}
+        <View style={styles.container}>
             <MaterialIcons name='image' size={24} color='royaleblue' />
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <TextInput style={styles.input}
-                    value={message}
-                    onChangeText={setMessage}
-                    multiline
-                />
-            </TouchableWithoutFeedback>
+            <TextInput style={styles.input}
+                value={message}
+                onChangeText={setMessage}
+                multiline
+            />
             <MaterialIcons name='send' style={styles.send} size={24} color='white' onPress={handleSendMessage} />
-            {/* </View> */}
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -43,7 +35,6 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-
         fontSize: 18,
         backgroundColor: "white",
         padding: 5,

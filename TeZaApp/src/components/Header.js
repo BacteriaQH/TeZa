@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        paddingTop: 40,
+        // paddingTop: 40,
         padding: 10
     },
     search: {

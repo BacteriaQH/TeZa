@@ -19,10 +19,10 @@ export const CheckEmailController = async (req, res) => {
 };
 
 export const RegisterController = async (req, res) => {
-    const { email, password, dob, name, isMale, address } = req.body;
+    const { email, password, dob, name, isMale, address, image } = req.body;
     const hashPassword = await hash(password);
 
-    const user = await createUser({ email, password: hashPassword, dob, name, isMale, address });
+    const user = await createUser({ email, password: hashPassword, dob, name, isMale, address, image });
     if (user) {
         return res.status(200).json({ code: 200, message: 'Register successfully' });
     } else {

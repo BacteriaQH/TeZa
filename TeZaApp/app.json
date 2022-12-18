@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "TeZaApp",
+    "slug": "TeZaApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/img/logo_c.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/img/logo_c.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2196F3"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/img/logo_c.png",
+        "backgroundColor": "#2196F3"
+      }
+    },
+    "web": {
+      "favicon": "./assets/img/logo_c.png"
+    }
+  }
+}

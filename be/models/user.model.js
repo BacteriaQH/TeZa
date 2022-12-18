@@ -14,6 +14,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
+        image: String,
         isMale: Boolean,
         dob: Date,
         address: String,

@@ -1,0 +1,1 @@
+export default SERVER_URL = 'https://e5d0-14-231-179-231.ap.ngrok.io'

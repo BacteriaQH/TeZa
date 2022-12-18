@@ -1,5 +1,23 @@
 import { Schema, model } from 'mongoose';
-import { agentSchema } from './qrcode.model.js';
+export const agentSchema = new Schema(
+    {
+        ip: String,
+        device: {
+            name: String,
+            os: {
+                version: String,
+                name: String,
+            },
+        },
+        location: {
+            country: String,
+            city: String
+        },
+        isDeviceRegister: Boolean,
+        isMobile: Boolean
+    }
+
+)
 const userSchema = new Schema(
     {
         name: {

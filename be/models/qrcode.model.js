@@ -1,15 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { agentSchema } from './user.model';
 
-export const agentSchema = new Schema({
-    browser: {
-        name: String,
-        version: String,
-    },
-    os: {
-        name: String,
-        version: String,
-    },
-});
+
 const qrcodeSchema = new Schema(
     {
         cipher: String,

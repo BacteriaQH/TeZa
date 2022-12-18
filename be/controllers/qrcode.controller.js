@@ -18,9 +18,8 @@ export const GenerateQRCodeController = async (req, res) => {
     //get socket id
     let io = getIO();
     let sID = getSocketID(io);
-    let agent = getAgent(req);
-    // console.log('agentObject', agent);
-
+    //get user agent
+    const agent = req.query.agent;
     const timestamp = Date.now().toString();
     const randomStr = generateRandomString(timestamp.length);
     /**
@@ -31,10 +30,7 @@ export const GenerateQRCodeController = async (req, res) => {
     const m = `${preM}.${sID}`;
 
     const c = CryptoJS.AES.encrypt(m, secretKey).toString();
-    const qrcodeS = await createQRCode(c, sID, {
-        browser: { name: agent.browser.name, version: agent.browser.version },
-        os: { name: agent.os.name, version: agent.os.version },
-    });
+    const qrcodeS = await createQRCode(c, sID, agent);
 
     const url = `${preURL}?tk=${c}`;
     const qrcode = await generateQRCode(url);
@@ -65,7 +61,7 @@ export const VerifyQRCodeController = async (req, res) => {
     const { name, _id } = await findUser(email);
     if (now - timestamp < 300000) {
         io.to(sID).emit('verified', { name, _id });
-        return res.status(200).json({ userAgent: qrcode.userAgent, sID });
+        return res.status(200).json({ userAgent: qrcode.agent, sID });
     }
 };
 export const LoginQRCodeController = async (req, res) => {

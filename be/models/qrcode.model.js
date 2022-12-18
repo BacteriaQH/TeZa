@@ -6,8 +6,7 @@ const qrcodeSchema = new Schema(
     {
         cipher: String,
         socketId: String,
-        userAgent: agentSchema,
-        // ip: String,
+        agent: agentSchema,
         time: {
             type: Date,
             default: Date.now,

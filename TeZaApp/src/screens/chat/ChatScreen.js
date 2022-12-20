@@ -24,8 +24,8 @@ export default function ChatScreen() {
             <ImageBackground source={background} resizeMode='cover'>
                 <LinearGradient
                     colors={['#ee7752', '#e73c7e', '#23a6d5', '#23d5ab']}
-                    start={{ x: 0.8, y: 0.8 }}
-                    end={{ x: 0, y: 0 }}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
                 >
                     <FlatList
                         data={messages}
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        opacity: 0.6
+        opacity: 0.5
     }
 })

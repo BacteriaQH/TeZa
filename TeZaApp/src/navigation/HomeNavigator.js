@@ -7,6 +7,7 @@ import ChatScreen from '../screens/chat/ChatScreen';
 
 import ScanQRScreen from '../screens/qr/ScanQRScreen';
 import SettingScreen from '../screens/setting/SettingScreen';
+import InformationScreen from './../screens/qr/InformationScreen';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function HomeNavigator() {
             <HomeStack.Screen name="Chat" component={ChatScreen} />
             <HomeStack.Screen name="ScanQR" component={ScanQRScreen} />
             <HomeStack.Screen name="Setting" component={SettingScreen} />
+            <HomeStack.Screen name="Infor" component={InformationScreen} />
         </HomeStack.Navigator>
     )
 }

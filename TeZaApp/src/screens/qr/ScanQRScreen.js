@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, ActivityIndicator } from 'react-native'
 
 import { BarCodeScanner } from 'expo-barcode-scanner'
-
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function ScanQRScreen() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(false);
+    const navigation = useNavigation();
     useEffect(() => {
         const getBarCodeScannerPermissions = async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -17,9 +20,18 @@ export default function ScanQRScreen() {
         getBarCodeScannerPermissions();
     }, []);
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ type, data }) => {
         setScanned(true);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        setIsLoading(true);
+        const [url, cipher] = data.split('?tk=');
+        const userStr = await AsyncStorage.getItem('user');
+        const user = JSON.parse(userStr);
+        axios.post(url, { email: user.email, tk: cipher })
+            .catch(e => console.log(e))
+            .then((res) => {
+                setIsLoading(false);
+                navigation.navigate('Infor', { data: res.data });
+            })
     };
 
     if (hasPermission === null) {
@@ -34,8 +46,10 @@ export default function ScanQRScreen() {
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
             />
-
-            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+            {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
+            {scanned &&
+                <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} disabled={isLoading} />
+            }
         </View>
     )
 }

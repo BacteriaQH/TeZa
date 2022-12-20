@@ -10,7 +10,6 @@ export default function SettingScreen() {
     const { authDispatch } = useContext(GlobalContext);
     const getItemFromStorage = async () => {
         try {
-            const token = await AsyncStorage.getItem('token');
             const user = await AsyncStorage.getItem('user');
             setUser(JSON.parse(user))
         } catch (e) {

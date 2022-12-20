@@ -1,7 +1,10 @@
-import { faCalendar, faLocationDot, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faImage, faLocationDot, faLock, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+
+import axios from 'axios';
+import { BASE_URL } from '../../constant';
 const defaultFn = () => {};
 const InforStep = ({ page, setPage, isLast, name, email, onNext, onSubmit = defaultFn }) => {
     const [password, setPassword] = useState('');
@@ -12,7 +15,7 @@ const InforStep = ({ page, setPage, isLast, name, email, onNext, onSubmit = defa
     const [dob, setDob] = useState('');
     const [isMale, setIsMale] = useState(1);
     const [address, setAddress] = useState('');
-
+    const [image, setImage] = useState('');
     const [notify, setNotify] = useState({
         err: false,
         success: false,
@@ -32,6 +35,50 @@ const InforStep = ({ page, setPage, isLast, name, email, onNext, onSubmit = defa
                 success: true,
                 message: 'Mật khẩu khớp',
             });
+        }
+    };
+
+    const handleImageUpload = async (file) => {
+        const fileU = file.target.files[0];
+        if (fileU) {
+            axios
+                .get(`${BASE_URL}/api/file/upload`, {
+                    params: { fileName: fileU.name, fileType: fileU.type },
+                })
+                .then((res) => {
+                    if (res.data.code === 200) {
+                        const url = res.data.data.url;
+                        axios
+                            .put(res.data.data.signedRequest, fileU, {
+                                headers: {
+                                    'Content-Type': fileU.type,
+                                },
+                                crossdomain: true,
+                            })
+                            .then((res) => {
+                                if (res.status === 200) {
+                                    console.log(url);
+                                    setImage(url);
+                                }
+                            });
+                    }
+                });
+        }
+    };
+
+    const handleDeleteImage = () => {
+        const key = image.split('/')[4];
+        if (key) {
+            axios
+                .get(`${BASE_URL}/api/file/delete`, {
+                    params: { key },
+                })
+                .then((res) => {
+                    if (res.data.code === 200) {
+                        console.log('delete success');
+                        setImage('');
+                    }
+                });
         }
     };
     return (
@@ -113,6 +160,32 @@ const InforStep = ({ page, setPage, isLast, name, email, onNext, onSubmit = defa
                     name="address"
                     onChange={(e) => setAddress(e.target.value)}
                 />
+                <Form.Label className="my-3">
+                    <label>
+                        Chọn ảnh:
+                        <FontAwesomeIcon icon={faImage} className=" mx-2" style={{ cursor: 'pointer' }} />
+                        <input
+                            type="file"
+                            accept="image/png, image/jpeg"
+                            style={{
+                                opacity: 0,
+                                zIndex: '-1',
+                                position: 'absolute',
+                            }}
+                            onChange={handleImageUpload}
+                        />
+                    </label>
+                </Form.Label>
+                {image && (
+                    <>
+                        <img src={image} alt="avatar" className="avatar" style={{ height: 80, width: '60%' }} />
+                        <FontAwesomeIcon
+                            icon={faCircleXmark}
+                            style={{ cursor: 'pointer', position: 'absolute' }}
+                            onClick={handleDeleteImage}
+                        />
+                    </>
+                )}
             </div>
             {notify.message && <p className={notify.err ? 'text-danger' : 'text-success'}>{notify.message}</p>}
             {

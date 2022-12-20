@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         maxWidth: "80%",
-
         // Shadows
         shadowColor: '#fff',
         shadowOffset: {
@@ -41,12 +40,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 20,
         shadowRadius: 1.0,
 
-        elevation: 1,
+        // elevation: 1,
         opacity: 1
     },
     message: {
         fontSize: 16,
-        backgroundColor: 'inherit'
+        color: "#000",
     },
     time: {
         alignSelf: "flex-end",

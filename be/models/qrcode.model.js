@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { agentSchema } from './user.model';
+import { agentSchema } from './user.model.js';
 
 
 const qrcodeSchema = new Schema(

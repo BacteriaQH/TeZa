@@ -31,13 +31,13 @@ const initWebRoutes = (app) => {
     router.post('/login/password', LoginWithPasswordController);
 
     router.post('/generate/otp', CreateOTPController);
-    router.get('/generate/qrcode', GenerateQRCodeController);
+    router.post('/generate/qrcode', GenerateQRCodeController);
 
     router.post('/verify/otp', verifyOTPMiddleware, VerifyWithOTPController);
     router.post('/verify/qrcode', VerifyQRCodeController);
 
     router.post('/login/otp', verifyOTPMiddleware, LoginWithOTPController);
-    router.post('/login/qrcode', LoginQRCodeController);
+    router.post('/login/qr', LoginQRCodeController);
 
     return app.use('/api', router);
 };

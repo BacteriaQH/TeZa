@@ -4,16 +4,12 @@ export const agentSchema = new Schema(
         ip: String,
         device: {
             name: String,
-            os: {
-                version: String,
-                name: String,
-            },
+            version: String,
         },
         location: {
             country: String,
             city: String
         },
-        isDeviceRegister: Boolean,
         isMobile: Boolean
     }
 

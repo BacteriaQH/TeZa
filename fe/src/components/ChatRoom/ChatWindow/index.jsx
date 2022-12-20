@@ -37,8 +37,8 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
     const handleImageUpload = async (file) => {
         const fileU = file.target.files[0];
         if (fileU) {
-            axiosInstance
-                .get(`/api/file/upload`, {
+            axios
+                .get(`${BASE_URL}/api/file/upload`, {
                     params: { fileName: fileU.name, fileType: fileU.type },
                 })
                 .then((res) => {
@@ -65,8 +65,8 @@ const ChatWindow = ({ mate, defaultChatmate }) => {
     const handleDeleteImage = () => {
         const key = chatImage.split('/')[4];
         if (key) {
-            axiosInstance
-                .get(`/api/file/delete`, {
+            axios
+                .get(`${BASE_URL}/api/file/delete`, {
                     params: { key },
                 })
                 .then((res) => {

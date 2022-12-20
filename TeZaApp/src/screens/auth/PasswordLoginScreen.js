@@ -43,7 +43,7 @@ export default function PasswordLoginScreen() {
             <Button
                 title={loading ? 'Loading' : 'Log in'}
                 onPress={onPress}
-                disable={mail === '' || password === ''} />
+                disable={mail === '' || password === '' || loading} />
         </View>
     )
 }

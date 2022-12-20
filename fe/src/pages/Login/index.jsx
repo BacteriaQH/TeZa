@@ -23,7 +23,8 @@ const Login = ({ socket }) => {
     const [password, setPassword] = useState('');
     const [page, setPage] = useState(0);
     const [otp, setOtp] = useState('');
-
+    const [ip, setIp] = useState('');
+    const [location, setLocation] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [isExpired, setIsExpired] = useState(false);
 
@@ -34,12 +35,30 @@ const Login = ({ socket }) => {
     });
 
     const getQR = () => {
-        axios.get(`${BASE_URL}/api/generate/qrcode`).then((res) => {
-            setQrCodeBase64(res.data.qrcode);
+        axios.get('https://api.ipify.org/?format=json').then((response) => {
+            axios
+                .get(
+                    `https://geo.ipify.org/api/v2/country?apiKey=at_YTbB9HEoUn56yZ2b2BQBaiDWuR4by&ipAddress=${response.data.ip}`,
+                )
+                .then((res) => {
+                    axios
+                        .post(`${BASE_URL}/api/generate/qrcode`, {
+                            ip: response.data.ip,
+                            location: {
+                                country: res.data.location.country,
+                                city: res.data.location.region,
+                            },
+                        })
+                        .then((res) => {
+                            setQrCodeBase64(res.data.qrcode);
+                        });
+                });
         });
     };
-    useEffect(getQR, []);
-
+    useEffect(() => {
+        getQR();
+        return () => getQR();
+    }, []);
     socket.on('expired', () => {
         setIsExpired(true);
     });
@@ -131,6 +150,7 @@ const Login = ({ socket }) => {
 
         return true;
     };
+
     const steps = [
         <EmailStep
             page={page}

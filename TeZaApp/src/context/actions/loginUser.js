@@ -7,11 +7,6 @@ export default (type, param1, param2) => async (dispatch) => {
     dispatch({
         type: 'LOADING',
     })
-
-    const { data: ip } = await axios.get('https://api.iplocation.net/?cmd=get-ip');
-    console.log('ip', ip);
-    const res = await axios.get(`https://api.bigdatacloud.net/data/client-info`);
-    console.log('agent', res.data);
     if (type === 1) {
         axiosInstance
             .post(`/api/login/password`, { email: param1, password: param2 })

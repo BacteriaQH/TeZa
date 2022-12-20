@@ -10,7 +10,7 @@ import { getSocketID } from '../utils/getSocketID.js';
 import { findUser } from '../services/user.service.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/token.js';
 
-const preURL = `${process.env.SERVER_URL}/api/verify/qr`;
+const preURL = `${process.env.SERVER_URL}/api/verify/qrcode`;
 
 const secretKey = process.env.SECRET_KEY;
 
@@ -19,7 +19,21 @@ export const GenerateQRCodeController = async (req, res) => {
     let io = getIO();
     let sID = getSocketID(io);
     //get user agent
-    const agent = req.query.agent;
+    // console.log(req.body);
+    const { ip, location } = req.body;
+    const { os } = getAgent(req);
+
+    const userAgent = {
+        device: {
+            name: os.name,
+            version: os.version,
+        },
+        ip,
+        location,
+        isMobile: false
+    }
+    // console.log(userAgent);
+
     const timestamp = Date.now().toString();
     const randomStr = generateRandomString(timestamp.length);
     /**
@@ -28,9 +42,8 @@ export const GenerateQRCodeController = async (req, res) => {
     const preM = obfuscate(timestamp, randomStr).join('');
 
     const m = `${preM}.${sID}`;
-
     const c = CryptoJS.AES.encrypt(m, secretKey).toString();
-    const qrcodeS = await createQRCode(c, sID, agent);
+    const qrcodeS = await createQRCode(c, sID, userAgent);
 
     const url = `${preURL}?tk=${c}`;
     const qrcode = await generateQRCode(url);
@@ -45,10 +58,10 @@ export const VerifyQRCodeController = async (req, res) => {
     const io = getIO();
 
     const { tk, email } = req.body;
+
     const m = CryptoJS.AES.decrypt(tk, secretKey);
     const d = m.toString(CryptoJS.enc.Utf8);
     const [preM, sID] = d.split('.');
-
     const qrcode = await getQRCode(sID);
     //console.log(qrcode);
     /**
@@ -58,7 +71,8 @@ export const VerifyQRCodeController = async (req, res) => {
 
     const now = new Date().getTime();
     //console.log(now - timestamp);
-    const { name, _id } = await findUser(email);
+    const user = await findUser(email);
+    const { name, _id } = user;
     if (now - timestamp < 300000) {
         io.to(sID).emit('verified', { name, _id });
         return res.status(200).json({ userAgent: qrcode.agent, sID });
@@ -67,7 +81,6 @@ export const VerifyQRCodeController = async (req, res) => {
 export const LoginQRCodeController = async (req, res) => {
     const io = getIO();
     const { email, sID } = req.body;
-
     const user = await findUser(email);
     const { password, ...orther } = user._doc;
 

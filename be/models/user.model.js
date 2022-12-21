@@ -28,7 +28,10 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
-        image: String,
+        image: {
+            type: String,
+            default: "https://teza-app-bucket.s3.ap-southeast-1.amazonaws.com/TeZa/default_avatar_qpARBAbinP.jpg"
+        },
         isMale: Boolean,
         dob: Date,
         address: String,

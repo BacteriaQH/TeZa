@@ -39,3 +39,14 @@ export const updateAgent = async (email) => {
         return false;
     }
 }
+
+
+export const searchUserByName = async (name) => {
+    try {
+        const user = await User.find({ name: { $regex: name, $options: 'i' } });
+        return user;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+}

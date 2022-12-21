@@ -6,6 +6,7 @@ import {
     Greeting,
     LoginWithPasswordController,
     RegisterController,
+    SearchUserByNameController,
 } from '../controllers/user.controller.js';
 import { CreateOTPController, LoginWithOTPController, VerifyWithOTPController } from '../controllers/otp.controller.js';
 import { verifyOTPMiddleware } from '../middlewares/verifyOTP.middleware.js';
@@ -39,6 +40,7 @@ const initWebRoutes = (app) => {
     router.post('/login/otp', verifyOTPMiddleware, LoginWithOTPController);
     router.post('/login/qr', LoginQRCodeController);
 
+    router.get('/search', SearchUserByNameController);
     return app.use('/api', router);
 };
 

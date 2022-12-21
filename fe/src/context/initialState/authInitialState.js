@@ -1,6 +1,7 @@
+const user = JSON.parse(localStorage.getItem('user'));
 const authInitialState = {
-    isLoggedIn: false,
-    data: {},
+    isLoggedIn: user ? true : false,
+    data: user ? user : null,
     err: null,
     loading: false
 };

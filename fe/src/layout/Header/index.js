@@ -4,21 +4,21 @@ import { Col, Row, Image } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import Input from '../../components/Input';
 import Avatar from '../../components/Avatar';
 
 import logo from '../../assets/imgs/c_logo.png';
+import Search from '../../components/Search';
 
 const Header = () => {
     return (
-        <Row style={{ margin: '0px' }}>
+        <Row >
             <Col xs={3}>
                 <Row>
                     <Col xs={3}>
-                        <Image src={logo} alt="logo" roundedCircle style={{ width: '70px' }} className="" />
+                        <Image src={logo} alt="logo" roundedCircle style={{ width: '70px' }} />
                     </Col>
                     <Col xs={9}>
-                        <Input isSearch />
+                        <Search />
                     </Col>
                 </Row>
             </Col>

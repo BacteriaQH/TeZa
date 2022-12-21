@@ -1,4 +1,4 @@
-import { createUser, checkEmail, findUser } from '../services/user.service.js';
+import { createUser, checkEmail, findUser, searchUserByName } from '../services/user.service.js';
 import { hash, compare } from '../utils/hash.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/token.js';
 
@@ -68,3 +68,24 @@ export const LoginWithPasswordController = async (req, res) => {
         });
     }
 };
+
+export const SearchUserByNameController = async (req, res) => {
+    const { name } = req.query;
+    const user = await searchUserByName(name);
+    const userS = user.map((item) => {
+        const { password, ...other } = item._doc;
+        return other;
+    })
+    if (userS) {
+        return res.status(200).json({
+            code: 200,
+            message: 'Search success',
+            user: userS
+        });
+    } else {
+        return res.status(400).json({
+            code: 400,
+            message: 'User not found',
+        });
+    }
+}
